@@ -50,6 +50,7 @@ class HSautomation():
         if not self.codelist and not codelist: self.codelist = self.tga.getCodeList()
         for code in self.codelist:
             self.store_one_org(code)
+        utils.savePickle(var=self.sofar, filename="orgs_before_error")
         self.solve_error()
 
         return self.sofar
@@ -67,11 +68,14 @@ class HSautomation():
             print "Failed. Put in error log."
             self.error[code] = e
 
-    def solve_error(self):
-        while self.error:
+    def solve_error(self, max_attemp=0):
+        attemp=max_attemp+len(self.error)
+        while self.error and attemp>0:
             code = self.error.keys()[0]
             print "Solving error of code", code
             self.store_one_org(code)
+            
+            attemp-=1
         
     
     def runOrgScalePipe(self, codelist=None):
