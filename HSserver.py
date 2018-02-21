@@ -15,7 +15,7 @@ deleteHardBounced(csv)
 
 
 class HSautomation():
-    def __init__(self, codes2upload=[]):
+    def __init__(self, usr, psw, codes2upload=[]):
         print "Initializing..."
 
         self.new_company = []
@@ -33,7 +33,7 @@ class HSautomation():
         self.existedContacts = {}
         self.baseurl = "https://api.hubapi.com/"
         self.hapikey = "7542f67a-16dc-4936-ae03-cdc24543b4d0"
-        self.tga = TGA()
+        self.tga = TGA(username=usr,password=psw)
         self.error = {}
         self.headers = {"content-type": "application/json"}
 
@@ -275,9 +275,7 @@ class HSautomation():
             pickle.dump(self.error, f)
 
     def _saveExistedContacts(self):
-        with open('existedContacts2Company-{0}.pickle'.format(dateti
-                  me.strftime(datetime.today(), '%Y-%m-%dT%H-%S')),
-                  'w') as f:
+        with open('existedContacts2Company-{0}.pickle'.format(datetime.strftime(datetime.today(), '%Y-%m-%dT%H-%S')), 'w') as f:
             pickle.dump(self.existedContacts, f)
 
     def _getCompanyValuesPerPage(self, companies, dic={}, outterkey='companyId'):
@@ -529,6 +527,7 @@ def checkHSmissed():
 
 
 if __name__ == "__main__":
-    hs = HSautomation()
+  
+    hs = HSautomation(usr="ws.axcelerate", psw="PiUvpotKa")
     orgs = hs.store_all_org()
     utils.savePickle(var=orgs, filename="AllOrgs")
